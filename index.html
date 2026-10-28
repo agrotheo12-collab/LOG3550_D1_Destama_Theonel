@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Catalogue de livres avec recherche, filtres et gestion des disponibilités.">
+  <title>Bibliothèque — Catalogue de livres</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navigation" aria-label="Navigation principale">
+      <a class="brand" href="index.html">Bibliothèque du Collège Sainte Croix du Limbé</a>
+      <a href="#catalogue">Catalogue</a>
+      <a href="#ajouter">Ajouter un livre</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Catalogue de livres</h1>
+      <p>Découvrez, recherchez et gérez vos livres facilement.</p>
+    </section>
+
+    <section id="catalogue" class="section" aria-labelledby="titre-catalogue">
+      <h2 id="titre-catalogue">Tous les livres</h2>
+
+      <div class="filters">
+        <div class="form-group">
+          <label for="recherche">Rechercher par titre ou auteur</label>
+          <input id="recherche" type="search" placeholder="Ex. : Le Petit Prince">
+        </div>
+
+        <div class="form-group">
+          <label for="filtre-categorie">Catégorie</label>
+          <select id="filtre-categorie">
+            <option value="">Toutes les catégories</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="tri">Trier les livres</label>
+          <select id="tri">
+            <option value="titre-asc">Titre (A à Z)</option>
+            <option value="titre-desc">Titre (Z à A)</option>
+            <option value="annee-asc">Année (croissante)</option>
+            <option value="annee-desc">Année (décroissante)</option>
+          </select>
+        </div>
+
+        <label class="checkbox-label">
+          <input id="disponibles-seulement" type="checkbox">
+          Afficher uniquement les livres disponibles
+        </label>
+      </div>
+
+      <p id="nombre-livres" aria-live="polite">Chargement des livres...</p>
+      <div id="liste-livres" class="book-grid"></div>
+      <p id="aucun-resultat" hidden>Aucun livre ne correspond à votre recherche.</p>
+    </section>
+
+    <section id="ajouter" class="section" aria-labelledby="titre-ajout">
+      <h2 id="titre-ajout">Ajouter un livre</h2>
+
+      <form id="formulaire-livre" novalidate>
+        <div class="form-group">
+          <label for="titre">Titre du livre</label>
+          <input id="titre" name="titre" type="text" minlength="2" required aria-describedby="erreur-titre">
+          <p id="erreur-titre" class="error-message" aria-live="polite"></p>
+        </div>
+
+        <div class="form-group">
+          <label for="auteur">Auteur</label>
+          <input id="auteur" name="auteur" type="text" minlength="2" required aria-describedby="erreur-auteur">
+          <p id="erreur-auteur" class="error-message" aria-live="polite"></p>
+        </div>
+
+        <div class="form-group">
+          <label for="annee">Année de publication</label>
+          <input id="annee" name="annee" type="number" min="1450" required aria-describedby="erreur-annee">
+          <p id="erreur-annee" class="error-message" aria-live="polite"></p>
+        </div>
+
+        <div class="form-group">
+          <label for="categorie">Catégorie</label>
+          <select id="categorie" name="categorie" required aria-describedby="erreur-categorie">
+            <option value="">Choisir une catégorie</option>
+          </select>
+          <p id="erreur-categorie" class="error-message" aria-live="polite"></p>
+        </div>
+
+        <div class="form-group">
+          <label for="disponible">Disponibilité</label>
+          <select id="disponible" name="disponible">
+            <option value="true">Disponible</option>
+            <option value="false">Indisponible</option>
+          </select>
+        </div>
+
+        <button type="submit">Ajouter le livre</button>
+        <button id="reinitialiser" type="reset" class="secondary-button">Réinitialiser</button>
+        <p id="message-formulaire" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Projet LOG3550 — Catalogue de livres</p>
+  </footer>
+</body>
+</html>
