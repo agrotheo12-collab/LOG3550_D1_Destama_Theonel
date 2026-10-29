@@ -21,13 +21,13 @@ Technologies utilisées
 
 Structure du projet
 
-LOG3550_D1_Theonel/
+devoir1/
 ├── index.html
 ├── css/
 │   └── styles.css
 ├── js/
+│   ├── data.js
 │   └── app.js
-├── captures/
 └── README.md
 
 Installation et exécution
