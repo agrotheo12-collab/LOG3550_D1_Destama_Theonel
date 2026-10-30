@@ -25,7 +25,7 @@ Fonctionnalités principales
 * JavaScript natif pour la recherche, le filtrage et la gestion des livres.
 * Git et GitHub pour le suivi des versions et l’hébergement du code source.
 
-    2.2 Structure des fichiers
+    2.2 Structure finale des fichiers
 
 devoir1/
 ├── index.html
@@ -38,13 +38,13 @@ devoir1/
 
 3. Mode d’emploi
 
-1. Ouvrir le fichier index.html dans un navigateur récent.
-2. Consulter les livres affichés dans le catalogue.
-3. Saisir un titre ou un nom d’auteur dans le champ de recherche.
-4. Choisir une catégorie ou utiliser le filtre pour afficher uniquement les livres disponibles.
-5. Utiliser le menu de tri pour organiser les livres par titre ou par année.
-6. Remplir le formulaire pour ajouter un livre en respectant les règles de validation.
-7. Cliquer sur le bouton de suppression pour retirer un livre après confirmation.
+    a. Ouvrir le fichier index.html dans un navigateur récent.
+    b. Consulter les livres affichés dans le catalogue.
+    c. Saisir un titre ou un nom d’auteur dans le champ de recherche.
+    d. Choisir une catégorie ou utiliser le filtre pour afficher uniquement les livres disponibles.
+    e. Utiliser le menu de tri pour organiser les livres par titre ou par année.
+    f. Remplir le formulaire pour ajouter un livre en respectant les règles de validation.
+    g. Cliquer sur le bouton de suppression pour retirer un livre après confirmation.
 
 Les livres ajoutés ou supprimés sont enregistrés dans le localStorage du navigateur. Les données restent donc disponibles dans le même navigateur après le rechargement de la page.
 
