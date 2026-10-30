@@ -38,13 +38,13 @@ devoir1/
 
 3. Mode d’emploi
 
-    a. Ouvrir le fichier index.html dans un navigateur récent.
-    b. Consulter les livres affichés dans le catalogue.
-    c. Saisir un titre ou un nom d’auteur dans le champ de recherche.
-    d. Choisir une catégorie ou utiliser le filtre pour afficher uniquement les livres disponibles.
-    e. Utiliser le menu de tri pour organiser les livres par titre ou par année.
-    f. Remplir le formulaire pour ajouter un livre en respectant les règles de validation.
-    g. Cliquer sur le bouton de suppression pour retirer un livre après confirmation.
+a. Ouvrir le fichier index.html dans un navigateur récent.
+b. Consulter les livres affichés dans le catalogue.
+c. Saisir un titre ou un nom d’auteur dans le champ de recherche.
+d. Choisir une catégorie ou utiliser le filtre pour afficher uniquement les livres disponibles.
+e. Utiliser le menu de tri pour organiser les livres par titre ou par année.
+f. Remplir le formulaire pour ajouter un livre en respectant les règles de validation.
+g. Cliquer sur le bouton de suppression pour retirer un livre après confirmation.
 
 Les livres ajoutés ou supprimés sont enregistrés dans le localStorage du navigateur. Les données restent donc disponibles dans le même navigateur après le rechargement de la page.
 
