@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import creer_tables, initialiser_donnees
 from app.routers.livres import router as livres_router
@@ -23,6 +24,16 @@ app = FastAPI(
     ),
     version="1.0.0",
     lifespan=lifespan
+)
+
+
+# Autoriser uniquement le frontend de l'application.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5500"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
 )
 
 

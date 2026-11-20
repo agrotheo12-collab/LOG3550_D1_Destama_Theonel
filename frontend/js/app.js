@@ -1,6 +1,6 @@
 "use strict";
 
-const STORAGE_KEY = "log3550_catalogue_livres";
+const API_URL = "http://127.0.0.1:8000";
 
 const recherche = document.querySelector("#recherche");
 const filtreCategorie = document.querySelector("#filtre-categorie");
@@ -23,35 +23,7 @@ const erreurAuteur = document.querySelector("#erreur-auteur");
 const erreurAnnee = document.querySelector("#erreur-annee");
 const erreurCategorie = document.querySelector("#erreur-categorie");
 
-let livres = chargerLivres();
-
-function chargerLivres() {
-  try {
-    const donnees = localStorage.getItem(STORAGE_KEY);
-
-    if (donnees !== null) {
-      const livresSauvegardes = JSON.parse(donnees);
-
-      if (Array.isArray(livresSauvegardes)) {
-        return livresSauvegardes;
-      }
-    }
-  } catch (erreur) {
-    console.error("Impossible de charger les livres :", erreur);
-  }
-
-  return livresInitiaux.map((livre) => ({ ...livre }));
-}
-
-function sauvegarderLivres() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(livres));
-  } catch (erreur) {
-    console.error("Impossible de sauvegarder les livres :", erreur);
-    messageFormulaire.textContent =
-      "Impossible de sauvegarder les modifications dans le navigateur.";
-  }
-}
+let livres = [];
 
 function normaliser(texte) {
   return String(texte)
@@ -73,6 +45,45 @@ function remplirCategories() {
     optionFormulaire.textContent = categorie;
     champCategorie.appendChild(optionFormulaire);
   });
+}
+
+function obtenirMessageErreur(donnees) {
+  if (Array.isArray(donnees.detail)) {
+    return donnees.detail
+      .map((erreur) => {
+        const champ = erreur.loc ? erreur.loc.slice(1).join(".") : "Donnée";
+        return `${champ} : ${erreur.msg}`;
+      })
+      .join(" ");
+  }
+
+  if (typeof donnees.detail === "string") {
+    return donnees.detail;
+  }
+
+  return "Une erreur est survenue lors de la communication avec l'API.";
+}
+
+async function chargerLivres() {
+  nombreLivres.textContent = "Chargement des livres...";
+  listeLivres.replaceChildren();
+  aucunResultat.hidden = true;
+
+  try {
+    const reponse = await fetch(`${API_URL}/livres/?skip=0&limit=100`);
+
+    if (!reponse.ok) {
+      throw new Error(`Erreur HTTP ${reponse.status}`);
+    }
+
+    livres = await reponse.json();
+    afficherLivres();
+  } catch (erreur) {
+    console.error("Erreur lors du chargement des livres :", erreur);
+    nombreLivres.textContent =
+      "Impossible de charger les livres. Vérifiez que l'API est démarrée.";
+    aucunResultat.hidden = true;
+  }
 }
 
 function obtenirLivresFiltres() {
@@ -155,7 +166,7 @@ function afficherLivres() {
     );
 
     boutonSupprimer.addEventListener("click", () => {
-      supprimerLivre(livre.id);
+      supprimerLivre(livre.id, livre.titre, boutonSupprimer);
     });
 
     carte.append(titre, auteur, annee, categorie, statut, boutonSupprimer);
@@ -190,20 +201,20 @@ function validerFormulaire() {
   const categorie = champCategorie.value;
   const anneeActuelle = new Date().getFullYear();
 
-  if (titre.length < 2) {
+  if (titre.length < 2 || titre.length > 200) {
     afficherErreur(
       champTitre,
       erreurTitre,
-      "Le titre doit contenir au moins 2 caractères."
+      "Le titre doit contenir entre 2 et 200 caractères."
     );
     valide = false;
   }
 
-  if (auteur.length < 2) {
+  if (auteur.length < 2 || auteur.length > 200) {
     afficherErreur(
       champAuteur,
       erreurAuteur,
-      "L'auteur doit contenir au moins 2 caractères."
+      "L'auteur doit contenir entre 2 et 200 caractères."
     );
     valide = false;
   }
@@ -234,7 +245,7 @@ function validerFormulaire() {
   return valide;
 }
 
-function ajouterLivre(evenement) {
+async function ajouterLivre(evenement) {
   evenement.preventDefault();
   messageFormulaire.textContent = "";
 
@@ -245,7 +256,6 @@ function ajouterLivre(evenement) {
   }
 
   const nouveauLivre = {
-    id: Date.now(),
     titre: champTitre.value.trim(),
     auteur: champAuteur.value.trim(),
     annee: Number(champAnnee.value),
@@ -253,34 +263,79 @@ function ajouterLivre(evenement) {
     disponible: champDisponible.value === "true"
   };
 
-  livres.push(nouveauLivre);
-  sauvegarderLivres();
+  const boutonAjouter = formulaire.querySelector('button[type="submit"]');
+  boutonAjouter.disabled = true;
+  messageFormulaire.textContent = "Enregistrement du livre...";
 
-  formulaire.reset();
-  effacerErreurs();
-  messageFormulaire.textContent = "Le livre a été ajouté.";
-  afficherLivres();
+  try {
+    const reponse = await fetch(`${API_URL}/livres/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(nouveauLivre)
+    });
+
+    const donnees = await reponse.json();
+
+    if (!reponse.ok) {
+      throw new Error(obtenirMessageErreur(donnees));
+    }
+
+    formulaire.reset();
+    effacerErreurs();
+    messageFormulaire.textContent =
+      `Le livre « ${donnees.titre} » a été ajouté avec succès.`;
+
+    await chargerLivres();
+  } catch (erreur) {
+    console.error("Erreur lors de l'ajout du livre :", erreur);
+    messageFormulaire.textContent =
+      `Impossible d'ajouter le livre : ${erreur.message}`;
+  } finally {
+    boutonAjouter.disabled = false;
+  }
 }
 
-function supprimerLivre(id) {
-  const livre = livres.find((element) => element.id === id);
-
-  if (!livre) {
-    return;
-  }
-
+async function supprimerLivre(id, titre, bouton) {
   const confirmation = window.confirm(
-    `Voulez-vous vraiment supprimer « ${livre.titre} » ?`
+    `Voulez-vous vraiment supprimer « ${titre} » ?`
   );
 
   if (!confirmation) {
     return;
   }
 
-  livres = livres.filter((element) => element.id !== id);
-  sauvegarderLivres();
-  afficherLivres();
-  messageFormulaire.textContent = "Le livre a été supprimé.";
+  bouton.disabled = true;
+
+  try {
+    const reponse = await fetch(`${API_URL}/livres/${id}`, {
+      method: "DELETE"
+    });
+
+    if (!reponse.ok) {
+      let message = `Erreur HTTP ${reponse.status}`;
+
+      try {
+        const donnees = await reponse.json();
+        message = obtenirMessageErreur(donnees);
+      } catch {
+        // La réponse ne contient pas de message JSON.
+      }
+
+      throw new Error(message);
+    }
+
+    messageFormulaire.textContent =
+      `Le livre « ${titre} » a été supprimé avec succès.`;
+
+    await chargerLivres();
+  } catch (erreur) {
+    console.error("Erreur lors de la suppression du livre :", erreur);
+    messageFormulaire.textContent =
+      `Impossible de supprimer le livre : ${erreur.message}`;
+    bouton.disabled = false;
+  }
 }
 
 recherche.addEventListener("input", afficherLivres);
@@ -295,4 +350,4 @@ formulaire.addEventListener("reset", () => {
 });
 
 remplirCategories();
-afficherLivres();
+chargerLivres();
