@@ -6,12 +6,14 @@ from sqlmodel import Field, SQLModel
 
 
 class Categorie(str, Enum):
-    ROMAN = "roman"
-    SCIENCE = "science"
-    HISTOIRE = "histoire"
-    INFORMATIQUE = "informatique"
-    AUTRE = "autre"
-
+    ROMAN = "Roman"
+    SCIENCE_FICTION = "Science-fiction"
+    LITTERATURE = "Littérature"
+    HISTOIRE = "Histoire"
+    INFORMATIQUE = "Informatique"
+    DEVELOPPEMENT_PERSONNEL = "Développement personnel"
+    RELIGION = "Religion"
+    LANGUE = "Langue"
 
 class Livre(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

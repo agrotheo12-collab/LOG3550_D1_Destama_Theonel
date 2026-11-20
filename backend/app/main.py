@@ -14,9 +14,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="API Bibliothèque",
+    title="API Bibliothèque du Collège Sainte Croix de Limbé",
     description=(
-        "API REST de gestion d'une bibliothèque. "
+        "API REST de gestion de la bibliothèque du Collège Sainte Croix de Limbé. "
         "Elle permet de créer, consulter, rechercher, modifier "
         "et supprimer des livres."
     ),
