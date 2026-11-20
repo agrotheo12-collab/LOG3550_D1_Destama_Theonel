@@ -1,105 +1,294 @@
-Catalogue de livres — Bibliothèque du CSC de Limbé
+# API Bibliothèque — Catalogue de livres du Collège Sainte Croix de Limbé
 
-1. Description du projet
+## 1. Présentation du projet
 
-Ce projet a été réalisé dans le cadre du Devoir 1 du cours LOG3550. Il consiste à développer une application web permettant de consulter et de gérer un catalogue de livres pour la Bibliothèque du CSC de Limbé.
+Ce projet a été réalisé dans le cadre du **Devoir 2 du cours LOG3550**. Il constitue la deuxième étape du développement d'un catalogue numérique de livres pour la bibliothèque du Collège Sainte Croix de Limbé.
 
-L’application utilise HTML5, CSS3 et JavaScript natif, sans framework JavaScript ni framework CSS.
+L'objectif est de transformer le catalogue initial en une application client-serveur. Le backend expose une API REST développée avec FastAPI, tandis que le frontend communique avec cette API pour consulter, ajouter et supprimer des livres.
 
-Fonctionnalités principales
+Les données sont enregistrées dans une base de données SQLite.
 
-* Affichage des livres sous forme de cartes.
-* Recherche de livres par titre ou par auteur.
-* Filtrage par catégorie et par disponibilité.
-* Tri des livres par titre ou par année de publication.
-* Ajout et suppression de livres.
-* Sauvegarde des données dans le localStorage du navigateur.
-* Interface adaptative pour les téléphones, les tablettes et les ordinateurs.
+## 2. Technologies utilisées
 
-2. Technologies et structure du projet
+### Backend
+- Python 3.14
+- FastAPI : création de l'API REST
+- Uvicorn : serveur ASGI
+- SQLModel : gestion des modèles et interactions avec la base de données
+- SQLite : système de gestion de base de données
+- Pydantic : validation des données
+- Pytest et HTTPX : tests automatisés de l'API
 
-    2.1. Technologies utilisées
+### Frontend
+- HTML5
+- CSS3
+- JavaScript
+- Fetch API : communication avec le backend
 
-* HTML5 pour structurer le contenu.
-* CSS3 pour la mise en forme et le design responsive.
-* JavaScript natif pour la recherche, le filtrage et la gestion des livres.
-* Git et GitHub pour le suivi des versions et l’hébergement du code source.
+### Outils
+- Visual Studio Code
+- Terminal macOS
+- Git et GitHub
+- Swagger UI : documentation et tests interactifs de l'API
 
-    2.2 Structure finale des fichiers
+## 3. Structure du projet
 
-devoir1/
-├── index.html
-├── css/
-│   └── styles.css
-├── js/
-│   ├── data.js
-│   └── app.js
+```text
+LOG3550_D2_Projet/
+│
+├── backend/
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── database.py
+│   │   ├── models.py
+│   │   ├── schemas.py
+│   │   └── routers/
+│   │       ├── __init__.py
+│   │       └── livres.py
+│   │
+│   ├── tests/
+│   │   └── test_livres.py
+│   │
+│   └── requirements.txt
+│
+├── frontend/
+│   ├── index.html
+│   ├── css/
+│   │   └── styles.css
+│   └── js/
+│       ├── data.js
+│       └── app.js
+│
+├── .gitignore
 └── README.md
+```
 
-3. Mode d’emploi
+La base de données `bibliotheque.db` est créée automatiquement au démarrage de l'API. L'environnement virtuel `.venv` est utilisé pour le développement et n'est pas destiné à être remis avec le projet.
 
-a. Ouvrir le fichier index.html dans un navigateur récent.
-b. Consulter les livres affichés dans le catalogue.
-c. Saisir un titre ou un nom d’auteur dans le champ de recherche.
-d. Choisir une catégorie ou utiliser le filtre pour afficher uniquement les livres disponibles.
-e. Utiliser le menu de tri pour organiser les livres par titre ou par année.
-f. Remplir le formulaire pour ajouter un livre en respectant les règles de validation.
-g. Cliquer sur le bouton de suppression pour retirer un livre après confirmation.
+## 4. Installation et configuration
 
-Les livres ajoutés ou supprimés sont enregistrés dans le localStorage du navigateur. Les données restent donc disponibles dans le même navigateur après le rechargement de la page.
+### 4.1. Prérequis
 
-4. Choix de conception
+- Python 3.10 ou une version supérieure
+- pip
+- Un navigateur Web
+- Git
 
-J’ai choisi HTML5, CSS3 et JavaScript natif afin de respecter les consignes du devoir et de mieux comprendre les bases du développement frontend.
+### 4.2. Accéder au backend
 
-Les balises HTML sémantiques permettent d’organiser clairement le contenu. Le CSS utilise une approche responsive pour adapter la présentation aux différentes tailles d’écran.
+Depuis le répertoire principal du projet :
 
-Le JavaScript est organisé en fonctions afin de séparer le chargement des données, l’affichage, la recherche, le filtrage et la validation du formulaire.
+```bash
+cd backend
+```
 
-Le localStorage permet de conserver les modifications sans avoir besoin d’un serveur ou d’une base de données. Enfin, textContent est utilisé pour afficher les données des livres de manière plus sûre.
+### 4.3. Créer l'environnement virtuel
 
-5. Difficultés rencontrées
+```bash
+python3 -m venv .venv
+```
 
-L’une des principales difficultés a été d’adapter la grille du catalogue aux différentes tailles d’écran : une colonne sur téléphone, deux sur tablette et trois ou plus sur ordinateur.
+### 4.4. Activer l'environnement virtuel
 
-La mise en place de la recherche, des filtres et du tri a également demandé une attention particulière afin que les fonctionnalités puissent fonctionner ensemble.
+Sur macOS ou Linux :
 
-La validation du formulaire a nécessité des contrôles sur le titre, l’auteur, l’année de publication et la catégorie.
+```bash
+source .venv/bin/activate
+```
 
-Enfin, les tests dans le navigateur et la validation du HTML ont permis de vérifier le fonctionnement et la conformité du projet.
+### 4.5. Installer les dépendances
 
-6. Sources et outils d’assistance utilisés
+```bash
+pip install -r requirements.txt
+```
 
-   6.1. Sources
+## 5. Démarrage de l'application
 
-* Documentation MDN Web Docs : https://developer.mozilla.org/
-* Validateur HTML du W3C : https://validator.w3.org/
+### 5.1. Lancer le backend
 
-   6.2. Outils d’assistance
+Dans un terminal, depuis le dossier `backend`, avec l'environnement virtuel activé :
 
-* ChatGPT (OpenAI) : utilisé comme outil d’assistance pour comprendre certaines notions, résoudre des difficultés de programmation et améliorer la documentation du projet.
-* Navigateur web : utilisé pour tester les fonctionnalités et vérifier l’affichage responsive.
-* Git et GitHub : utilisés pour le suivi des modifications et la gestion du dépôt du projet.
-* Terminal macOS : utilisé pour créer, modifier, tester et versionner les fichiers du projet.
+```bash
+python -m uvicorn app.main:app --reload
+```
 
-7. Réponses aux questions théoriques
+L'API est accessible à l'adresse :
 
-Question 1 — Pourquoi les balises sémantiques sont-elles préférables à une suite de div ?
+http://127.0.0.1:8000
 
-Les balises sémantiques comme <header>, <nav>, <main> et <footer> donnent un sens précis au contenu d’une page HTML.
-Elles améliorent l’accessibilité en facilitant la navigation des personnes qui utilisent des lecteurs d’écran.
-Elles aident les moteurs de recherche à mieux comprendre la structure et le contenu du site.
-Elles rendent le code plus clair et plus facile à lire pour les développeurs.
-Elles facilitent donc la maintenance du projet, contrairement à une utilisation excessive de div sans signification particulière.
+### 5.2. Accéder à la documentation Swagger
 
-Question 2 — Quelle est la différence entre map, filter et forEach, et lesquels avez-vous utilisés pour la recherche et le filtrage ?
+La documentation interactive est disponible à l'adresse :
 
-La méthode map() transforme chaque élément d’un tableau et retourne un nouveau tableau contenant les résultats.
-La méthode filter() sélectionne les éléments qui respectent une condition et retourne un nouveau tableau.
-La méthode forEach() parcourt les éléments d’un tableau sans créer directement un nouveau tableau.
-Dans mon projet, j’ai utilisé filter() pour rechercher les livres par titre ou auteur, filtrer par catégorie et afficher uniquement les livres disponibles.
-J’ai également utilisé forEach() pour parcourir les livres et les catégories, notamment pour générer les éléments de l’interface.
+http://127.0.0.1:8000/docs
 
-8. Dépôt GitHub
+Elle permet de consulter les routes et de tester les différentes opérations de l'API.
 
-Le code source du projet est disponible sur GitHub : https://github.com/agrotheo12-collab/LOG3550_D1_Destama_Theonel.git
+### 5.3. Lancer le frontend
+
+Ouvrir un deuxième terminal et exécuter :
+
+```bash
+cd frontend
+python3 -m http.server 5500
+```
+
+Ouvrir ensuite le navigateur à l'adresse :
+
+http://127.0.0.1:5500
+
+Le frontend communique avec le backend à l'aide de requêtes HTTP. Le serveur backend doit donc être démarré pour que le catalogue puisse fonctionner correctement.
+
+## 6. Fonctionnalités de l'application
+
+L'application permet de :
+
+- Consulter la liste des livres.
+- Rechercher un livre par son titre ou le nom de son auteur.
+- Filtrer les livres par catégorie.
+- Filtrer les livres selon leur disponibilité.
+- Trier les résultats.
+- Ajouter un nouveau livre.
+- Supprimer un livre.
+- Afficher les messages de chargement et les erreurs de connexion à l'API.
+
+Les opérations de consultation, d'ajout et de suppression du frontend sont effectuées à travers l'API avec JavaScript et Fetch API. Les données ne sont plus enregistrées dans `localStorage`.
+
+## 7. Modèle de données et validation
+
+Chaque livre possède les champs suivants :
+
+| Champ | Description |
+|---|---|
+| id | Identifiant généré automatiquement |
+| titre | Titre du livre |
+| auteur | Auteur du livre |
+| annee | Année de publication |
+| categorie | Catégorie du livre |
+| isbn | ISBN facultatif et unique |
+| disponible | Disponibilité du livre |
+
+### Règles de validation
+
+- Le titre doit contenir entre 2 et 200 caractères.
+- Le nom de l'auteur doit contenir entre 2 et 200 caractères.
+- L'année doit être comprise entre 1450 et l'année actuelle.
+- La catégorie doit appartenir aux catégories autorisées.
+- L'ISBN, lorsqu'il est fourni, doit contenir exactement 10 ou 13 chiffres.
+- La disponibilité est définie à `true` par défaut.
+- L'identifiant est généré par la base de données et ne doit pas être fourni par le client.
+
+### Catégories disponibles
+
+- Roman
+- Science-fiction
+- Littérature
+- Histoire
+- Informatique
+- Développement personnel
+- Religion
+- Langue
+
+## 8. Base de données
+
+Le projet utilise SQLite avec SQLModel pour la gestion des données.
+
+La base de données est créée automatiquement au démarrage de l'application. Lorsqu'elle est vide, dix livres initiaux sont ajoutés automatiquement.
+
+La contrainte d'unicité de l'ISBN est également appliquée au niveau de la base de données afin d'éviter l'enregistrement de deux livres possédant le même ISBN.
+
+Le fichier de la base de données est créé dans le dossier `backend/`.
+
+## 9. Routes de l'API REST
+
+| Méthode HTTP | Route | Description |
+|---|---|---|
+| GET | `/sante` | Vérifier l'état de l'API |
+| GET | `/livres/` | Consulter et filtrer les livres |
+| GET | `/livres/{id}` | Consulter un livre par son identifiant |
+| POST | `/livres/` | Ajouter un livre |
+| PUT | `/livres/{id}` | Remplacer complètement un livre |
+| PATCH | `/livres/{id}` | Modifier partiellement un livre |
+| DELETE | `/livres/{id}` | Supprimer un livre |
+
+La route de consultation de la liste accepte notamment les paramètres suivants :
+
+- `q` : rechercher dans le titre ou le nom de l'auteur.
+- `categorie` : filtrer par catégorie.
+- `disponible` : filtrer selon la disponibilité.
+- `skip` : définir le nombre de résultats à ignorer.
+- `limit` : limiter le nombre de résultats retournés.
+
+L'API utilise notamment les codes HTTP suivants :
+
+- `200` : requête réussie.
+- `201` : livre créé.
+- `204` : livre supprimé avec succès.
+- `404` : livre introuvable.
+- `409` : conflit, notamment en cas d'ISBN déjà utilisé.
+- `422` : données invalides.
+
+## 10. Tests automatisés
+
+Les tests sont réalisés avec Pytest et le client de test de FastAPI.
+
+Ils utilisent une base de données SQLite temporaire en mémoire afin de ne pas modifier les données de la base utilisée par l'application.
+
+Pour exécuter les tests, ouvrir un terminal dans le dossier `backend`, activer l'environnement virtuel, puis exécuter :
+
+```bash
+python -m pytest -v
+```
+
+La suite de tests comprend notamment :
+
+- La création d'un livre.
+- La consultation d'un livre.
+- La consultation avec filtres.
+- Le remplacement complet d'un livre.
+- La modification partielle d'un livre.
+- La suppression d'un livre.
+- La gestion d'un livre introuvable.
+- La validation des données.
+- La validation des catégories et de l'ISBN.
+- La détection d'un ISBN en double.
+- La vérification de l'état de l'API.
+
+**Résultat obtenu lors de l'exécution : 11 tests réussis.**
+
+## 11. Configuration CORS
+
+Le middleware CORS est configuré dans le backend afin d'autoriser le frontend servi depuis l'origine suivante :
+
+`http://127.0.0.1:5500`
+
+Cette configuration permet au navigateur de communiquer avec l'API tout en limitant les origines autorisées.
+
+## 12. Explications techniques
+
+### FastAPI, Uvicorn et Pydantic
+
+FastAPI est le framework utilisé pour construire l'API REST et définir les routes HTTP. Uvicorn est le serveur ASGI qui exécute l'application et reçoit les requêtes. Pydantic valide les données reçues et permet de contrôler leur format avant leur traitement.
+
+### Séparation entre modèles et schémas
+
+Le modèle SQLModel représente la structure des données enregistrées dans la base de données. Les schémas Pydantic définissent les données acceptées à l'entrée et celles retournées par l'API. Cette séparation améliore la sécurité et facilite la maintenance du code.
+
+### Différence entre PUT et PATCH
+
+PUT sert à remplacer complètement les données d'une ressource. PATCH sert à modifier seulement certains champs sans remplacer les autres. Une opération idempotente produit le même état final lorsqu'elle est répétée avec les mêmes données. Dans cette application, les modifications PUT et PATCH définissent des valeurs, ce qui permet de conserver le même état final lorsqu'une même modification est répétée.
+
+## 13. Dépôt GitHub
+
+Le code source du projet est disponible sur GitHub :
+
+https://github.com/agrotheo12-collab/LOG3550_D1_Destama_Theonel
+
+La branche utilisée pour le Devoir 2 est `devoir2`.
+
+---
+
+**Cours :** LOG3550  
+**Travail :** Devoir 2 — Développement d'une API REST  
+**Institution :** Collège Sainte Croix de Limbé
