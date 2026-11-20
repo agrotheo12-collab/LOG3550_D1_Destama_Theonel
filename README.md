@@ -123,7 +123,7 @@ La documentation interactive est disponible à l'adresse :
 
 http://127.0.0.1:8000/docs
 
-Elle permet de consulter les routes et de tester les différentes opérations de l'API.
+Elle permet de consulter les routes, leurs descriptions, les modèles de données et des exemples JSON pour les opérations de création et de modification.
 
 ### 5.3. Lancer le frontend
 
@@ -254,8 +254,9 @@ La suite de tests comprend notamment :
 - La validation des catégories et de l'ISBN.
 - La détection d'un ISBN en double.
 - La vérification de l'état de l'API.
+- Le rejet d'un identifiant fourni directement par le client.
 
-**Résultat obtenu lors de l'exécution : 11 tests réussis.**
+**Résultat obtenu lors de la dernière exécution : 12 tests réussis.**
 
 ## 11. Configuration CORS
 

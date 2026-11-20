@@ -32,11 +32,34 @@ class LivreBase(BaseModel):
 
 
 class LivreCreate(LivreBase):
-    pass
+    model_config = ConfigDict(
+        extra="forbid",
+        json_schema_extra={
+            "examples": [
+                {
+                    "titre": "Introduction à Linux",
+                    "auteur": "Theonel Destama",
+                    "annee": 2022,
+                    "categorie": "Informatique",
+                    "isbn": "9781234567897",
+                    "disponible": True
+                }
+            ]
+        }
+    )
 
 
 class LivreUpdate(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(
+        extra="forbid",
+        json_schema_extra={
+            "examples": [
+                {
+                    "disponible": False
+                }
+            ]
+        }
+    )
 
     titre: Optional[str] = Field(default=None, min_length=2, max_length=200)
     auteur: Optional[str] = Field(default=None, min_length=2, max_length=200)

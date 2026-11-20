@@ -15,6 +15,23 @@ async def lifespan(app: FastAPI):
     yield
 
 
+descriptions_tags = [
+    {
+        "name": "Livres",
+        "description": (
+            "Opérations de gestion du catalogue de livres : "
+            "ajout, consultation, recherche, modification et suppression."
+        ),
+    },
+    {
+        "name": "Système",
+        "description": (
+            "Opérations permettant de vérifier le fonctionnement de l'API."
+        ),
+    },
+]
+
+
 app = FastAPI(
     title="API Bibliothèque du Collège Sainte Croix de Limbé",
     description=(
@@ -23,6 +40,7 @@ app = FastAPI(
         "et supprimer des livres."
     ),
     version="1.0.0",
+    openapi_tags=descriptions_tags,
     lifespan=lifespan
 )
 

@@ -16,7 +16,16 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=list[LivreRead])
+@router.get(
+    "/",
+    response_model=list[LivreRead],
+    summary="Lister les livres",
+    description=(
+        "Retourne la liste des livres de la bibliothèque. "
+        "Permet la recherche par titre ou auteur, le filtrage "
+        "par catégorie et disponibilité, ainsi que la pagination."
+    )
+)
 def lister_livres(
     q: Optional[str] = Query(default=None, description="Recherche par titre ou auteur"),
     categorie: Optional[Categorie] = Query(default=None, description="Filtrer par catégorie"),
@@ -47,7 +56,13 @@ def lister_livres(
     return session.exec(requete).all()
 
 
-@router.get("/{livre_id}", response_model=LivreRead)
+@router.get(
+    "/{livre_id}",
+    response_model=LivreRead,
+    summary="Consulter un livre",
+    description="Retourne les informations d'un livre à partir de son identifiant.",
+    responses={404: {"description": "Livre introuvable."}}
+)
 def obtenir_livre(
     livre_id: int,
     session: Session = Depends(get_session)
@@ -66,7 +81,17 @@ def obtenir_livre(
 @router.post(
     "/",
     response_model=LivreRead,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    summary="Ajouter un livre",
+    description=(
+        "Enregistre un nouveau livre dans la bibliothèque. "
+        "L'identifiant est généré automatiquement. "
+        "L'ISBN doit être unique."
+    ),
+    responses={
+        409: {"description": "Un livre avec cet ISBN existe déjà."},
+        422: {"description": "Données fournies invalides."}
+    }
 )
 def creer_livre(
     donnees: LivreCreate,
@@ -92,7 +117,20 @@ def creer_livre(
     return livre
 
 
-@router.put("/{livre_id}", response_model=LivreRead)
+@router.put(
+    "/{livre_id}",
+    response_model=LivreRead,
+    summary="Remplacer un livre",
+    description=(
+        "Remplace complètement les informations d'un livre "
+        "existant à partir de son identifiant."
+    ),
+    responses={
+        404: {"description": "Livre introuvable."},
+        409: {"description": "Un livre avec cet ISBN existe déjà."},
+        422: {"description": "Données fournies invalides."}
+    }
+)
 def remplacer_livre(
     livre_id: int,
     donnees: LivreCreate,
@@ -127,7 +165,20 @@ def remplacer_livre(
     return livre
 
 
-@router.patch("/{livre_id}", response_model=LivreRead)
+@router.patch(
+    "/{livre_id}",
+    response_model=LivreRead,
+    summary="Modifier partiellement un livre",
+    description=(
+        "Modifie uniquement les champs fournis pour un livre existant. "
+        "Les champs non transmis restent inchangés."
+    ),
+    responses={
+        404: {"description": "Livre introuvable."},
+        409: {"description": "Un livre avec cet ISBN existe déjà."},
+        422: {"description": "Données fournies invalides."}
+    }
+)
 def modifier_livre(
     livre_id: int,
     donnees: LivreUpdate,
@@ -162,7 +213,10 @@ def modifier_livre(
 
 @router.delete(
     "/{livre_id}",
-    status_code=status.HTTP_204_NO_CONTENT
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Supprimer un livre",
+    description="Supprime définitivement un livre à partir de son identifiant.",
+    responses={404: {"description": "Livre introuvable."}}
 )
 def supprimer_livre(
     livre_id: int,
