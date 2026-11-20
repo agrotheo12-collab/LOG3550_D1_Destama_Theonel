@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.database import creer_tables
+from app.database import creer_tables, initialiser_donnees
 from app.routers.livres import router as livres_router
 
 
@@ -10,6 +10,7 @@ from app.routers.livres import router as livres_router
 async def lifespan(app: FastAPI):
     """Initialiser la base de données au démarrage de l'application."""
     creer_tables()
+    initialiser_donnees()
     yield
 
 
