@@ -10,6 +10,8 @@ ANNEE_ACTUELLE = date.today().year
 
 
 class LivreBase(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     titre: str = Field(min_length=2, max_length=200)
     auteur: str = Field(min_length=2, max_length=200)
     annee: int = Field(ge=1450, le=ANNEE_ACTUELLE)
@@ -23,7 +25,9 @@ class LivreBase(BaseModel):
         if valeur is not None and (
             not valeur.isdigit() or len(valeur) not in (10, 13)
         ):
-            raise ValueError("L'ISBN doit contenir exactement 10 ou 13 chiffres.")
+            raise ValueError(
+                "L'ISBN doit contenir exactement 10 ou 13 chiffres."
+            )
         return valeur
 
 
@@ -32,6 +36,8 @@ class LivreCreate(LivreBase):
 
 
 class LivreUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     titre: Optional[str] = Field(default=None, min_length=2, max_length=200)
     auteur: Optional[str] = Field(default=None, min_length=2, max_length=200)
     annee: Optional[int] = Field(
@@ -47,11 +53,16 @@ class LivreUpdate(BaseModel):
         if valeur is not None and (
             not valeur.isdigit() or len(valeur) not in (10, 13)
         ):
-            raise ValueError("L'ISBN doit contenir exactement 10 ou 13 chiffres.")
+            raise ValueError(
+                "L'ISBN doit contenir exactement 10 ou 13 chiffres."
+            )
         return valeur
 
 
 class LivreRead(LivreBase):
     id: int
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(
+        from_attributes=True,
+        extra="forbid"
+    )

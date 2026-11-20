@@ -214,3 +214,23 @@ def test_verifier_sante_api(client):
 
     assert reponse.status_code == 200
     assert reponse.json() == {"statut": "ok"}
+
+
+def test_rejeter_identifiant_fourni_par_client(client):
+    """Vérifier que le client ne peut pas fournir son propre identifiant."""
+    donnees = donnees_livre()
+    donnees["id"] = 99
+
+    reponse_creation = client.post("/livres/", json=donnees)
+
+    assert reponse_creation.status_code == 422
+
+    creation = client.post("/livres/", json=donnees_livre())
+    livre_id = creation.json()["id"]
+
+    reponse_modification = client.patch(
+        f"/livres/{livre_id}",
+        json={"id": 99}
+    )
+
+    assert reponse_modification.status_code == 422
