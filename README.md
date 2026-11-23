@@ -270,15 +270,19 @@ Cette configuration permet au navigateur de communiquer avec l'API tout en limit
 
 ### FastAPI, Uvicorn et Pydantic
 
-FastAPI est le framework utilisé pour construire l'API REST et définir les routes HTTP. Uvicorn est le serveur ASGI qui exécute l'application et reçoit les requêtes. Pydantic valide les données reçues et permet de contrôler leur format avant leur traitement.
+FastAPI est le framework utilisé pour construire l'API REST et définir les routes HTTP. Uvicorn est le serveur ASGI qui exécute l'application et reçoit les requêtes. Pydantic valide les données reçues, contrôle leur format et facilite leur sérialisation.
 
 ### Séparation entre modèles et schémas
 
-Le modèle SQLModel représente la structure des données enregistrées dans la base de données. Les schémas Pydantic définissent les données acceptées à l'entrée et celles retournées par l'API. Cette séparation améliore la sécurité et facilite la maintenance du code.
+Le modèle SQLModel représente la structure des données enregistrées dans la base de données. Les schémas Pydantic définissent les données acceptées à l'entrée et celles retournées par l'API. Cette séparation améliore la sécurité, évite d'exposer directement la structure interne de la base de données et facilite la maintenance du code.
 
-### Différence entre PUT et PATCH
+### Différence entre PUT et PATCH et notion d'idempotence
 
-PUT sert à remplacer complètement les données d'une ressource. PATCH sert à modifier seulement certains champs sans remplacer les autres. Une opération idempotente produit le même état final lorsqu'elle est répétée avec les mêmes données. Dans cette application, les modifications PUT et PATCH définissent des valeurs, ce qui permet de conserver le même état final lorsqu'une même modification est répétée.
+PUT sert à remplacer complètement les données d'une ressource, tandis que PATCH permet de modifier seulement certains champs sans remplacer les autres.
+
+Une opération est idempotente lorsqu'elle produit le même état final, même si elle est répétée plusieurs fois. PUT et DELETE sont des méthodes idempotentes. POST ne l'est généralement pas, car chaque requête peut créer une nouvelle ressource.
+
+Cette distinction permet de mieux gérer les répétitions de requêtes, notamment en cas d'erreur réseau.
 
 ## 13. Dépôt GitHub
 
@@ -287,6 +291,10 @@ Le code source du projet est disponible sur GitHub :
 https://github.com/agrotheo12-collab/LOG3550_D1_Destama_Theonel
 
 La branche utilisée pour le Devoir 2 est `devoir2`.
+
+Lien direct vers la branche :
+
+https://github.com/agrotheo12-collab/LOG3550_D1_Destama_Theonel/tree/devoir2
 
 ---
 
